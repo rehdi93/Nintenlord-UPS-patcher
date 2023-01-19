@@ -90,7 +90,9 @@
             this.textBox2.ReadOnly = true;
             this.textBox2.Size = new System.Drawing.Size(179, 118);
             this.textBox2.TabIndex = 5;
-            this.textBox2.Text = "UPS Patch details:";
+            this.textBox2.WordWrap = false;
+            this.textBox2.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.textBox2.Font = new System.Drawing.Font(System.Drawing.FontFamily.GenericMonospace, 7.6f);
             // 
             // Form3
             // 

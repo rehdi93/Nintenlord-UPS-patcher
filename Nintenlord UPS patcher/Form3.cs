@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using System.IO;
 using Nintenlord.Hacking.Core;
+using System.Threading.Tasks;
+using System.Linq;
 
 namespace Nintenlord.UPSpatcher
 {
@@ -11,6 +13,7 @@ namespace Nintenlord.UPSpatcher
         public Form3()
         {
             InitializeComponent();
+            textBox2.Text = firstLine;
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -26,6 +29,8 @@ namespace Nintenlord.UPSpatcher
             }
         }
 
+        string firstLine = "UPS Patch details:";
+
         private void button2_Click(object sender, EventArgs e)
         {
             if (!File.Exists(textBox1.Text))
@@ -33,35 +38,36 @@ namespace Nintenlord.UPSpatcher
                 MessageBox.Show("Patch doesn't exist.");
                 return;
             }
+
+            textBox2.Text = "loading";
+
             UPSfile UPSFile = new UPSfile(textBox1.Text);
             int[,] details = UPSFile.GetData();
-            UPSFile = null;
+
+            // get required amount for padding
+            var largestValue = details.Cast<int>().Max();
+            var numberOfDigits = (int)Math.Max(1, Math.Floor(Math.Log10(largestValue)));
 
             List<string> lines = new List<string>(details.Length + 1);
-            lines.Add(textBox2.Lines[0]);
-            string offsets = "Offsets ";
-            string lenghts = "Lenghts";
-            lines.Add(offsets);
-            int longestOffsetLenght = offsets.Length;
-            for (int i = 0; i < details.Length / 2; i++)
+            lines.Add(firstLine);
+            //var lenTxt = "Lenghts";
+            lines.Add("Offsets" + "\t" + "Lenghts");
+
+            // make format string for the lines
+            var linefmt = "{0:X" + numberOfDigits + "}\t" + "{1}";
+
+            for (int i = 0; i < details.GetLength(0); i++)
             {
-                string line = Convert.ToString(details[i, 0], 16);
-                if (line.Length + 1 > longestOffsetLenght)
-                    longestOffsetLenght = line.Length + 1;
+                var line = string.Format(linefmt, details[i, 0], details[i, 1]);
                 lines.Add(line);
             }
 
-            for (int i = 1; i < lines.Count; i++)
-                lines[i] += "\t";
-            lines[1] += lenghts;
-            for (int i = 2; i < lines.Count; i++)
-            {
-                lines[i] += Convert.ToString(details[i - 2, 1], 16);
-                lines[i] = lines[i].ToUpper();
-            }
+            textBox2.Text += "...";
 
             textBox2.Lines = lines.ToArray();
         }
+
+        
 
         private void button3_Click(object sender, EventArgs e)
         {
