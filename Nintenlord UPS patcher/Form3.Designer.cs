@@ -92,7 +92,7 @@
             this.textBox2.TabIndex = 5;
             this.textBox2.WordWrap = false;
             this.textBox2.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.textBox2.Font = new System.Drawing.Font(System.Drawing.FontFamily.GenericMonospace, 7.6f);
+            this.textBox2.Font = new System.Drawing.Font(System.Drawing.FontFamily.GenericMonospace, 8f);
             // 
             // Form3
             // 

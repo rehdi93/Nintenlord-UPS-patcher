@@ -10,6 +10,9 @@ namespace Nintenlord.UPSpatcher
 {
     public partial class Form3 : Form
     {
+        const string firstLine = "UPS Patch details:";
+
+
         public Form3()
         {
             InitializeComponent();
@@ -29,9 +32,7 @@ namespace Nintenlord.UPSpatcher
             }
         }
 
-        string firstLine = "UPS Patch details:";
-
-        private void button2_Click(object sender, EventArgs e)
+        private async void button2_Click(object sender, EventArgs e)
         {
             if (!File.Exists(textBox1.Text))
             {
@@ -39,22 +40,24 @@ namespace Nintenlord.UPSpatcher
                 return;
             }
 
-            textBox2.Text = "loading";
+            textBox2.Text = "loading...";
+            toggleBtns(false);
 
+            // these actions take a long time and would block the UI thread
             UPSfile UPSFile = new UPSfile(textBox1.Text);
             int[,] details = UPSFile.GetData();
+            var largestValue = details.Cast<int>().Max();
 
             // get required amount for padding
-            var largestValue = details.Cast<int>().Max();
             var numberOfDigits = (int)Math.Max(1, Math.Floor(Math.Log10(largestValue)));
+            var spacing = new string(' ', 3);
 
             List<string> lines = new List<string>(details.Length + 1);
             lines.Add(firstLine);
-            //var lenTxt = "Lenghts";
-            lines.Add("Offsets" + "\t" + "Lenghts");
+            lines.Add("Offsets" + spacing + "Lenghts");
 
             // make format string for the lines
-            var linefmt = "{0:X" + numberOfDigits + "}\t" + "{1}";
+            var linefmt = "{0:X" + numberOfDigits + "}" + spacing + "{1}";
 
             for (int i = 0; i < details.GetLength(0); i++)
             {
@@ -62,16 +65,22 @@ namespace Nintenlord.UPSpatcher
                 lines.Add(line);
             }
 
-            textBox2.Text += "...";
-
             textBox2.Lines = lines.ToArray();
+            toggleBtns(true);
         }
-
-        
 
         private void button3_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+
+        void toggleBtns(bool b)
+        {
+            foreach (var btn in Controls.OfType<Button>())
+            {
+                btn.Enabled = b;
+            }
         }
     }
 }
