@@ -7,6 +7,7 @@ using System.Linq;
 
 namespace Nintenlord.UPSpatcher
 {
+    // get patch data
     public partial class Form3 : Form
     {
         const string firstLine = "UPS Patch details:";

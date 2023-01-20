@@ -6,6 +6,7 @@ using Nintenlord.Hacking.Core;
 
 namespace Nintenlord.UPSpatcher
 {
+    // patch a file
     public partial class Form1 : Form
     {
 

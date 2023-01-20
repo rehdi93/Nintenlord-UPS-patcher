@@ -6,6 +6,7 @@ using Nintenlord.Hacking.Core;
 
 namespace Nintenlord.UPSpatcher
 {
+    // create ups patch
     public partial class Form2 : Form
     {
         public Form2()
